@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Entypo } from '@expo/vector-icons'; 
 
 const InputContent = styled.View`
   margin-bottom: 20px;
@@ -13,7 +12,6 @@ margin-bottom: 10px;
 `;
 const InputContainer = styled.View`
   flex-direction: row;
-  justify-content: space-between;
   height: 40px;
   background-color: #F0EDEB;
   border-radius: 5px;
@@ -26,21 +24,23 @@ const Input = styled.TextInput`
   font-size: 14px;
   margin-right: auto;
 `;
+const WordsCount = styled.Text`
+  color: #000;
+  font-family: 'Inter_400Regular';
+  font-size: 14px;
+  margin-top: 5px;
+`;
 
-export const DateInput = () => {
+export const DescriptionInput = () => {
   return (
     <InputContent>
-      <Label>Data/hora</Label>
+      <Label>Descrição</Label>
       <InputContainer>
         <Input
-            placeholder=''
-            value='01 JUN 2022, 10:55'
-          /*onChangeText={() => }
-            onEndEditing={() => }
-            onFocus={} */
-          />
-        <Entypo name="chevron-down" size={24} color="black" />
+          placeholder="Dê detalhes se necessário"
+        />
       </InputContainer>
+      <WordsCount>0 / 140</WordsCount>
     </InputContent>
   )
 }

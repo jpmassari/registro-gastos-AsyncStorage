@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Entypo } from '@expo/vector-icons'; 
+import { Entypo } from '@expo/vector-icons';
 
 const InputContent = styled.View`
   margin-bottom: 20px;
@@ -27,18 +27,14 @@ const Input = styled.TextInput`
   margin-right: auto;
 `;
 
-export const DateInput = () => {
+export const CategoryInput = () => {
   return (
     <InputContent>
-      <Label>Data/hora</Label>
+      <Label>Categoria</Label>
       <InputContainer>
         <Input
-            placeholder=''
-            value='01 JUN 2022, 10:55'
-          /*onChangeText={() => }
-            onEndEditing={() => }
-            onFocus={} */
-          />
+          placeholder="Escolha uma opção"
+        />
         <Entypo name="chevron-down" size={24} color="black" />
       </InputContainer>
     </InputContent>

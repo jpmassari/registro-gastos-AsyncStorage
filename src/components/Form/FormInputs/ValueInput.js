@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Entypo } from '@expo/vector-icons'; 
 
 const InputContent = styled.View`
   margin-bottom: 20px;
@@ -13,7 +12,6 @@ margin-bottom: 10px;
 `;
 const InputContainer = styled.View`
   flex-direction: row;
-  justify-content: space-between;
   height: 40px;
   background-color: #F0EDEB;
   border-radius: 5px;
@@ -27,19 +25,14 @@ const Input = styled.TextInput`
   margin-right: auto;
 `;
 
-export const DateInput = () => {
+export const ValueInput = () => {
   return (
     <InputContent>
-      <Label>Data/hora</Label>
+      <Label>Valor</Label>
       <InputContainer>
         <Input
-            placeholder=''
-            value='01 JUN 2022, 10:55'
-          /*onChangeText={() => }
-            onEndEditing={() => }
-            onFocus={} */
-          />
-        <Entypo name="chevron-down" size={24} color="black" />
+          placeholder="R$ 0,00"
+        />
       </InputContainer>
     </InputContent>
   )
