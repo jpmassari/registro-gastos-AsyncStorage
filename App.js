@@ -14,7 +14,7 @@ import {
 } from '@expo-google-fonts/inter';
 import * as SplashScreen from 'expo-splash-screen';
 
-import { ScreenContainer } from './src/ui-components/ScreenContainer/ScreenContainer';
+import { ScrollableScreenContainer, LayoutContainer } from './src/ui-components/ScreenContainer/ScreenContainer';
 import { FormScreen } from './src/FormScreen/FormScreen';
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -52,11 +52,13 @@ export default function App() {
   
   if (!appIsReady || !fontsLoaded) return null;
   return (
-    <ScreenContainer
+    <ScrollableScreenContainer
       onLayout={onLayoutRootView}
     >
-      <FormScreen />
-    </ScreenContainer>
+      <LayoutContainer>
+        <FormScreen />
+      </LayoutContainer>
+    </ScrollableScreenContainer>
   );
 }
 
