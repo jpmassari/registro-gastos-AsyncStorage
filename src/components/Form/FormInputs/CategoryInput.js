@@ -2,14 +2,14 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { Entypo } from '@expo/vector-icons';
 
-const InputContent = styled.View`
+const Wrapper = styled.View`
   margin-bottom: 20px;
 `;
 const Label = styled.Text`
-color: #000;
-font-family: 'Inter_700Bold';
-font-size: 14px;
-margin-bottom: 10px;
+  color: #000;
+  font-family: 'Inter_700Bold';
+  font-size: 14px;
+  margin-bottom: 10px;
 `;
 const InputContainer = styled.View`
   flex-direction: row;
@@ -29,7 +29,7 @@ const Input = styled.TextInput`
 
 export const CategoryInput = () => {
   return (
-    <InputContent>
+    <Wrapper>
       <Label>Categoria</Label>
       <InputContainer>
         <Input
@@ -37,6 +37,6 @@ export const CategoryInput = () => {
         />
         <Entypo name="chevron-down" size={24} color="black" />
       </InputContainer>
-    </InputContent>
+    </Wrapper>
   )
 }

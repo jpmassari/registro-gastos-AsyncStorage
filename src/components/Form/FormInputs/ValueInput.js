@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-const InputContent = styled.View`
+const Wrapper = styled.View`
   margin-bottom: 20px;
 `;
 const Label = styled.Text`
-color: #000;
-font-family: 'Inter_700Bold';
-font-size: 14px;
-margin-bottom: 10px;
+  color: #000;
+  font-family: 'Inter_700Bold';
+  font-size: 14px;
+  margin-bottom: 10px;
 `;
 const InputContainer = styled.View`
   flex-direction: row;
@@ -27,13 +27,13 @@ const Input = styled.TextInput`
 
 export const ValueInput = () => {
   return (
-    <InputContent>
+    <Wrapper>
       <Label>Valor</Label>
       <InputContainer>
         <Input
           placeholder="R$ 0,00"
         />
       </InputContainer>
-    </InputContent>
+    </Wrapper>
   )
 }

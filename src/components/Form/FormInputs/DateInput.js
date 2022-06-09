@@ -5,14 +5,14 @@ import { Calendar } from 'react-native-calendars';
 
 import { CalendarLocale } from '../../../config-components/Calendar/CalendarLocale';
 
-const InputContent = styled.View`
+const Wrapper = styled.View`
   margin-bottom: 20px;
 `;
 const Label = styled.Text`
-color: #000;
-font-family: 'Inter_700Bold';
-font-size: 14px;
-margin-bottom: 10px;
+  color: #000;
+  font-family: 'Inter_700Bold';
+  font-size: 14px;
+  margin-bottom: 10px;
 `;
 const InputButton = styled.TouchableOpacity`
   flex-direction: row;
@@ -62,7 +62,7 @@ export const DateInput = () => {
     setSelectedDate({...selectedDate, selectedDate: selectedDate})
   }  
   return (
-    <InputContent>
+    <Wrapper>
       <Label>Data/hora</Label>
         <InputButton
           onPress={() => setCalendar({ ...calendar, display: !calendar.display})}
@@ -74,11 +74,11 @@ export const DateInput = () => {
        calendar.display &&
         <Calendar
           enableSwipeMonths={true}
-          onDayPress={day => {setCalendar({ ...calendar, calendarDate: new Date(day.dateString), time: new Date, dateString: day.dateString, }); selectDate(day)}}
+          onDayPress={day => {setCalendar({ ...calendar, calendarDate: new Date(day.dateString), time: new Date}); selectDate(day)}}
           markingType={'custom'}
           markedDates={selectedDate.selectedDate}
         />
       }
-    </InputContent>
+    </Wrapper>
   )
 }
