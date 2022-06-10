@@ -3,11 +3,12 @@ import styled from 'styled-components/native';
 import { Entypo } from '@expo/vector-icons'; 
 import { Calendar } from 'react-native-calendars';
 
-import { CalendarLocale } from '../../../config-components/Calendar/CalendarLocale';
+import { CalendarLocale } from '../../../helpers/Calendar/CalendarLocale';
 
 const Wrapper = styled.View`
   margin-bottom: 20px;
 `;
+
 const Label = styled.Text`
   color: #000;
   font-family: 'Inter_700Bold';
@@ -28,57 +29,88 @@ const InputButtonText = styled.Text`
   font-size: 14px;
   margin-right: auto;
 `;
+const ScreenPressable = styled.Pressable`
+  background-color: black;
+  position: absolute;
+  opacity: ${props => props.isCalendarShown ? .6 : 0};
+  top: -200px;
+  bottom: -100px;
+  margin: auto;
+  left: -20px;
+  right: -20px;
+`;
+const dateFormat = {
+  date: {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric', 
+    timeZone:'GMT'
+  },
+  time: {
+    hour:'2-digit',
+    minute:'2-digit'
+  }
+}
 
-export const DateInput = () => {   
+export const DateInput = ({
+  calendarShown = () => null
+}) => {   
 
   useEffect(() => {
     CalendarLocale()
   },[])
-  
-  const dateFormat = {
-    date: {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric', 
-      timeZone:'GMT'
-    },
-    time: {
-      hour:'2-digit',
-      minute:'2-digit'
-    }
-  }
+
   const [ calendar, setCalendar ] = useState({
     display: false,
-    calendarDate: new Date,
-    time: new Date, //A library do calendario não fornece nenhuma propriedade para customizar a timezone do UTC...
+    date: new Date(),
+    time: new Date(),
   });
-  const [ selectedDate, setSelectedDate ] = useState({
-    selectedDate:{}
+  const [ calendarDateToggle, setCalendarDateToggle ] = useState({
+    highlightedDay:{}
   })
 
-  const selectDate = (day) => {
-    let selectedDate = {};
-    selectedDate[day.dateString] = {customStyles : {container:{backgroundColor: '#f8aa4d', elevation: 2}, text:{color:'#fff'}}}
-    setSelectedDate({...selectedDate, selectedDate: selectedDate})
+  const selectDate = (dateString) => {
+    let selectedDay = {};
+    selectedDay[dateString] = {customStyles : {container:{backgroundColor: '#f8aa4d', elevation: 2}, text:{color:'#fff'}}}
+    setCalendarDateToggle({ ...calendarDateToggle, highlightedDay: selectedDay })
   }  
   return (
+    <>
+    <ScreenPressable 
+      onPress={() => { setCalendar({ ...calendar, display: false}); calendarShown(false) }}
+      isCalendarShown={calendar.display}
+      disabled={!calendar.display}
+      />
     <Wrapper>
       <Label>Data/hora</Label>
         <InputButton
-          onPress={() => setCalendar({ ...calendar, display: !calendar.display})}
+          onPress={() => { setCalendar({ ...calendar, display: !calendar.display }); calendarShown() }}
         >
-          <InputButtonText>{calendar.calendarDate.toLocaleDateString('en-gb', dateFormat.date)}, {calendar.time.toLocaleString("en-gb", dateFormat.time)}</InputButtonText>
+          <InputButtonText>{calendar.date.toLocaleDateString('en-gb', dateFormat.date)}, {calendar.time.toLocaleString("en-gb", dateFormat.time)}</InputButtonText>
           {calendar.display? <Entypo name="chevron-up" size={24} color="black" /> : <Entypo name="chevron-down" size={24} color="black" />}
         </InputButton>
       {
        calendar.display &&
         <Calendar
           enableSwipeMonths={true}
-          onDayPress={day => {setCalendar({ ...calendar, calendarDate: new Date(day.dateString), time: new Date}); selectDate(day)}}
+          onDayPress={day => {setCalendar({ ...calendar, date: new Date(day.dateString), time: new Date()}); selectDate(day.dateString)}}
           markingType={'custom'}
-          markedDates={selectedDate.selectedDate}
+          markedDates={calendarDateToggle.highlightedDay}
+          style={{
+            borderWidth: 1,
+            borderColor: 'gray',
+            borderBottomLeftRadius: 10,
+            borderBottomRightRadius: 30,
+            borderRadius: 5,
+            height: 365,
+            overflow: 'hidden',
+          }}
+          theme={{
+            calendarBackground: '#F0EDEB'
+          }}
         />
       }
     </Wrapper>
+    </>
   )
 }

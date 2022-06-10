@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 
 import { LayoutPadding } from '../../ui-components/LayoutPadding/LayoutPadding';
 
-export const Content = styled(LayoutPadding)`
+export const Container = styled(LayoutPadding)`
   flex-direction: column;
   flex: 1;
 `;
