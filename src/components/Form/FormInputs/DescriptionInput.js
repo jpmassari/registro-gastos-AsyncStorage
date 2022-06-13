@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-const InputContent = styled.View`
+const Wrapper = styled.View`
   margin-bottom: 20px;
 `;
 const Label = styled.Text`
-color: #000;
-font-family: 'Inter_700Bold';
-font-size: 14px;
-margin-bottom: 10px;
+  color: #000;
+  font-family: 'Inter_700Bold';
+  font-size: 14px;
+  margin-bottom: 10px;
 `;
 const InputContainer = styled.View`
   flex-direction: row;
@@ -33,7 +33,7 @@ const WordsCount = styled.Text`
 
 export const DescriptionInput = () => {
   return (
-    <InputContent>
+    <Wrapper>
       <Label>Descrição</Label>
       <InputContainer>
         <Input
@@ -41,6 +41,6 @@ export const DescriptionInput = () => {
         />
       </InputContainer>
       <WordsCount>0 / 140</WordsCount>
-    </InputContent>
+    </Wrapper>
   )
 }
