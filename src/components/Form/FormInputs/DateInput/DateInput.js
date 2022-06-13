@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { Entypo } from '@expo/vector-icons'; 
 import { Calendar } from 'react-native-calendars';
 
-import { setupLocale } from '../../../../config/Calendar/setuplocale';
+import { setupLocale } from '../../../../config/Calendar/setup-locale';
 
 const Wrapper = styled.View`
   margin-bottom: 20px;
@@ -93,10 +93,7 @@ export const DateInput = () => {
           <InputButtonText>
             {toDate(calendar)}, {toTime(calendar)}
           </InputButtonText>
-          {calendar.display 
-            ? <Entypo name="chevron-up" size={24} color="black" /> 
-            : <Entypo name="chevron-down" size={24} color="black" />
-          }
+          <Entypo name={calendar.display ? 'chevron-up' : 'chevron-down'} size={24} color="black" />
         </InputButton>
       {
        calendar.display &&
