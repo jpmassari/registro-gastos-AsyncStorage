@@ -1,6 +1,6 @@
 import { LocaleConfig } from 'react-native-calendars';
 
-export const CalendarLocale = () => {
+export const setupLocale = () => {
   LocaleConfig.locales['pt-BR'] = {
     monthNames: [
       'Janeiro',

@@ -3,12 +3,12 @@ import styled from 'styled-components/native';
 import { Entypo } from '@expo/vector-icons'; 
 import { Calendar } from 'react-native-calendars';
 
-import { CalendarLocale } from '../../../helpers/Calendar/CalendarLocale';
+import { setupLocale } from '../../../../config/Calendar/setuplocale';
 
 const Wrapper = styled.View`
   margin-bottom: 20px;
+  z-index:  ${props => props.isCalendarShown ? 2 : 0};
 `;
-
 const Label = styled.Text`
   color: #000;
   font-family: 'Inter_700Bold';
@@ -23,7 +23,6 @@ const InputButton = styled.TouchableOpacity`
   border-radius: 5px;
   padding: 10px 10px 10px 15px;
 `;
-
 const InputButtonText = styled.Text`
   font-family: 'Inter_400Regular';
   font-size: 14px;
@@ -38,6 +37,7 @@ const ScreenPressable = styled.Pressable`
   margin: auto;
   left: -20px;
   right: -20px;
+  z-index:  ${props => props.isCalendarShown ? 2 : 0};
 `;
 const dateFormat = {
   date: {
@@ -51,51 +51,67 @@ const dateFormat = {
     minute:'2-digit'
   }
 }
+const toDate = (calendar) => calendar.calendarDate.toLocaleDateString('en-gb', dateFormat.date);
+const toTime = (calendar) => calendar.time.toLocaleString("en-gb", dateFormat.time);
 
-export const DateInput = ({
-  calendarShown = () => null
-}) => {   
-
-  useEffect(() => {
-    CalendarLocale()
-  },[])
-
+export const DateInput = () => {   
   const [ calendar, setCalendar ] = useState({
     display: false,
-    date: new Date(),
+    calendarDate: new Date(),
     time: new Date(),
   });
-  const [ calendarDateToggle, setCalendarDateToggle ] = useState({
-    highlightedDay:{}
-  })
+  const [ selectedDate, setSelectedDate ] = useState({})
 
-  const selectDate = (dateString) => {
-    let selectedDay = {};
-    selectedDay[dateString] = {customStyles : {container:{backgroundColor: '#f8aa4d', elevation: 2}, text:{color:'#fff'}}}
-    setCalendarDateToggle({ ...calendarDateToggle, highlightedDay: selectedDay })
-  }  
+  const selectDate = (day) => {
+    setSelectedDate({ 
+      [day.dateString]: {
+        customStyles : {
+          container: {
+            backgroundColor: '#f8aa4d',
+            elevation: 2
+          },
+          text:{color:'#fff'}
+        }
+      },
+    });
+  };
+
+  useEffect(() => setupLocale(), [])
+
   return (
     <>
     <ScreenPressable 
-      onPress={() => { setCalendar({ ...calendar, display: false}); calendarShown(false) }}
+      onPress={() => setCalendar({ ...calendar, display: false})}
       isCalendarShown={calendar.display}
       disabled={!calendar.display}
       />
-    <Wrapper>
-      <Label>Data/hora</Label>
+    <Wrapper isCalendarShown={calendar.display} >
+      <Label>Data / hora</Label>
         <InputButton
-          onPress={() => { setCalendar({ ...calendar, display: !calendar.display }); calendarShown() }}
+          onPress={() => setCalendar({ ...calendar, display: !calendar.display })}
         >
-          <InputButtonText>{calendar.date.toLocaleDateString('en-gb', dateFormat.date)}, {calendar.time.toLocaleString("en-gb", dateFormat.time)}</InputButtonText>
-          {calendar.display? <Entypo name="chevron-up" size={24} color="black" /> : <Entypo name="chevron-down" size={24} color="black" />}
+          <InputButtonText>
+            {toDate(calendar)}, {toTime(calendar)}
+          </InputButtonText>
+          {calendar.display 
+            ? <Entypo name="chevron-up" size={24} color="black" /> 
+            : <Entypo name="chevron-down" size={24} color="black" />
+          }
         </InputButton>
       {
        calendar.display &&
         <Calendar
           enableSwipeMonths={true}
-          onDayPress={day => {setCalendar({ ...calendar, date: new Date(day.dateString), time: new Date()}); selectDate(day.dateString)}}
+          onDayPress={day => {
+            setCalendar({ ...calendar,
+              date: new Date(day.dateString),
+              time: new Date(),
+              display: false
+            });
+            selectDate(day);
+          }}
           markingType={'custom'}
-          markedDates={calendarDateToggle.highlightedDay}
+          markedDates={selectedDate}
           style={{
             borderWidth: 1,
             borderColor: 'gray',

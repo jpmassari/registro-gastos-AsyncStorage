@@ -25,24 +25,16 @@ export const Form = () => {
   const [ calendarShown, setCalendarShown ] = useState(false)
   return (
       <FormContainer calendarShown={calendarShown}>
-        {
-          calendarShown ? (
-            <DateInput calendarShown={() => setCalendarShown()}/>
-          ) : (
-            <>
-            <DateInput calendarShown={() => setCalendarShown(true)}/>
-            <CategoryInput />
-            <ValueInput />
-            <DescriptionInput />
-    
-            <RegisterButton
-              disabled={true}
-            >
-              <ButtonText>Registrar gasto</ButtonText>
-            </RegisterButton>
-            </>
-          )
-        }
+        <DateInput />
+        <CategoryInput />
+        <ValueInput />
+        <DescriptionInput />
+
+        <RegisterButton
+          disabled={true}
+        >
+          <ButtonText>Registrar gasto</ButtonText>
+        </RegisterButton>
       </FormContainer>
   )
 }
