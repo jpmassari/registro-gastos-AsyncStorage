@@ -15,7 +15,8 @@ import {
 import * as SplashScreen from 'expo-splash-screen';
 
 import { ScrollableScreenContainer, LayoutContainer } from './src/ui-components/ScreenContainer/ScreenContainer';
-import { FormScreen } from './src/FormScreen/FormScreen';
+import { FormScreen } from './src/Screens/FormScreen/FormScreen';
+
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
 

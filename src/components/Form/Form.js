@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/native';
 
 import { DateInput, CategoryInput, ValueInput, DescriptionInput } from './FormInputs/';
-
+import { Container, Title, Paragraph } from '../../Screens/styled/styled';
 const FormContainer = styled.View`
   padding-top: 40px;
 `;
@@ -22,9 +22,11 @@ const ButtonText = styled.Text`
 `;
 
 export const Form = () => {
-  const [ calendarShown, setCalendarShown ] = useState(false)
   return (
-      <FormContainer calendarShown={calendarShown}>
+      <FormContainer>
+        <Title>Registro de gastos</Title>
+        <Paragraph>Elencar as despesas por data e categoria é o primeiro passo para a educação financeira.</Paragraph>
+        
         <DateInput />
         <CategoryInput />
         <ValueInput />
