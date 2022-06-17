@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { Entypo } from '@expo/vector-icons';
 
-import { CategoriesScreen } from '../../../../Screens/CategoriesScreen/CategoriesScreen'
+import { CategoryScreen } from '../../../../Screens/CategoryScreen/CategoryScreen'
 
 const Wrapper = styled.View`
   margin-bottom: 20px;
@@ -31,25 +31,26 @@ const InputButtonText = styled.Text`
 
 export const CategoryInput = () => {
   const [ categoryInput, setCategoryInput ] = useState({
-    placeHolder: 'Escolha uma opção',
-    value: '',
-    showCategoriesScreen: false
+    value: 'Escolha uma opção',
+    screenDisplay: false,
+    selected: false
   })
   return (
     <>
     {
-    categoryInput.showCategoriesScreen &&
-      <CategoriesScreen 
-        closeScreen={() => setCategoryInput({ ...categoryInput, showCategoriesScreen: false})} 
+    categoryInput.screenDisplay &&
+      <CategoryScreen 
+        closeScreen={() => setCategoryInput({ ...categoryInput, screenDisplay: false })}
+        selectedInput={(value) => setCategoryInput({ ...categoryInput, value:value, screenDisplay: false, selected: true })} 
       /> 
     }
     <Wrapper>
       <Label>Categoria</Label>
       <InputButton
-        onPress={() => setCategoryInput({...categoryInput, showCategoriesScreen: true})}
+        onPress={() => setCategoryInput({ ...categoryInput, screenDisplay: true })}
       >
-        <InputButtonText value={categoryInput.value}>
-          {categoryInput.value ? categoryInput.value : categoryInput.placeHolder}
+        <InputButtonText value={categoryInput.selected}>
+          {categoryInput.value}
         </InputButtonText>
         <Entypo name={'chevron-down'} size={24} color="black" />
       </InputButton>
