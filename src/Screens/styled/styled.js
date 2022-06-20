@@ -20,3 +20,9 @@ export const Paragraph = styled.Text`
     text-align: center;
   `}
 `;
+export const DivisorLine = styled.View`
+  height: 1px;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.15);
+  margin-bottom: 10px;
+`;
