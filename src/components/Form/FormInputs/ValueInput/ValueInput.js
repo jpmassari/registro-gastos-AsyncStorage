@@ -30,8 +30,36 @@ const StatusMessage = styled.Text`
   margin-bottom: 10px;
 `;
 
-const toFormat = (value) => {
-  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)
+const ERRORS = {
+  NOT_EMPTY: 'não pode ser vazio',
+  IS_NEGATIVE: 'não pode ser negativo',
+  INVALID_FORMAT: 'formato invalido'
+};
+
+adjustSignPosition = (value) => {
+  const firstPart = value.slice(1,3);
+  const secondPart = value.slice(0,1);
+  const thirdPart = value.slice(-4);
+  return firstPart + ' ' + secondPart + thirdPart;
+}
+const toFormatBRL = (value) => {
+  const formatedValue = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value.replaceAll(',', '.'));
+  return isNegativeNumber(value) ? adjustSignPosition(formatedValue) : formatedValue;
+}
+const isNegativeNumber = (value) => Math.sign(parseInt(value)) === -1;
+
+const validate = (value) => {
+  if(!value) {
+    return ERRORS.NOT_EMPTY;
+  }
+  if(isNegativeNumber(value)) {
+    return ERRORS.IS_NEGATIVE;
+  }
+  const formatedValue = toFormatBRL(value).replace(/[R\$\-\.\,]/g,'');
+  if(isNaN(formatedValue)) {
+    return ERRORS.INVALID_FORMAT;
+  }
+  return '';
 }
 
 export const ValueInput = () => {
@@ -39,13 +67,12 @@ export const ValueInput = () => {
     id: 'valueInput',
     placeholder: 'R$ 0,00',
     value: '',
-    errorMessage: {
-      show: false,
-      message: ''
-    },
+    errorMessage: '' ,
     isFocused: false,
   });
   const [ justLoadedForm, setJustLoadedForm ] = useState(true);
+  const removeNonNumericCharacthers = (value) => setValueInput({ ...valueInput, value: value.replace(/[^0-9\-\.\,]/g,'') });
+
   return (
     <Wrapper>
       <Label>Valor</Label>
@@ -53,31 +80,27 @@ export const ValueInput = () => {
         <Input
           keyboardType='numeric'
           placeholder={valueInput.placeholder}
-          onChangeText={(value) => setValueInput({ ...valueInput, value: value.replace(/[^0-9\-\.]/g,'') })}
-          onEndEditing={() => !valueInput.value || Math.sign(parseInt(valueInput.value)) === -1 ? (
+          onChangeText={(value) => removeNonNumericCharacthers(value)}
+          onEndEditing={() => {
+            const error = validate(valueInput.value);
             setValueInput({
               ...valueInput,
-              errorMessage: { 
-                show: true,
-                message: !valueInput.value ? 'não pode ser vazio' : 'não pode ser negativo'       
-              },
-              isFocused: false, 
-              value: toFormat(valueInput.value)
-            }) 
-          ) : ( 
-            setValueInput({ ...valueInput, isFocused: false, value: toFormat(valueInput.value) })
-          )}
+              errorMessage: error,
+              isFocused: false,
+              value: (error !== ERRORS.INVALID_FORMAT || !error) ? toFormatBRL(valueInput.value) : ''
+            })
+          }}
           value={valueInput.value}
           onFocus={() => { 
-            setValueInput({ ...valueInput, isFocused: true, errorMessage: { show: false }, value: ''});
+            setValueInput({ ...valueInput, isFocused: true, value: ''});
             setJustLoadedForm(false)
           }}
         />
       </InputContainer>
       { 
-       (!valueInput.isFocused && valueInput.errorMessage.show) &&
-          <StatusMessage color={valueInput.errorMessage.show}>
-            {valueInput.errorMessage.message}
+       (!valueInput.isFocused && !!valueInput.errorMessage) &&
+          <StatusMessage color={!!valueInput.errorMessage}>
+            {valueInput.errorMessage}
           </StatusMessage> 
       }
     </Wrapper>
