@@ -52,6 +52,7 @@ const dateFormat = {
   }
 }
 const toDate = (calendar) => calendar.calendarDate.toLocaleDateString('en-gb', dateFormat.date);
+
 const toTime = (calendar) => calendar.time.toLocaleString("en-gb", dateFormat.time);
 
 export const DateInput = () => {   
@@ -76,7 +77,7 @@ export const DateInput = () => {
     });
   };
 
-  useEffect(() => setupLocale(), [])
+  useEffect(() => setupLocale(), []);
 
   return (
     <>
@@ -101,7 +102,7 @@ export const DateInput = () => {
           enableSwipeMonths={true}
           onDayPress={day => {
             setCalendar({ ...calendar,
-              date: new Date(day.dateString),
+              calendarDate: new Date(day.dateString),
               time: new Date(),
               display: false
             });
