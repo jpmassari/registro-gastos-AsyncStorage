@@ -30,7 +30,7 @@ export const Form = () => {
         <DateInput />
         <CategoryInput />
         <ValueInput />
-        <DescriptionInput />
+        <DescriptionInput/>
 
         <RegisterButton
           disabled={true}

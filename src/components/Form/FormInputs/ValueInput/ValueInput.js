@@ -93,7 +93,7 @@ export const ValueInput = () => {
           value={valueInput.value}
           onFocus={() => { 
             setValueInput({ ...valueInput, isFocused: true, value: ''});
-            setJustLoadedForm(false)
+            justLoadedForm && setJustLoadedForm(false)
           }}
         />
       </InputContainer>
