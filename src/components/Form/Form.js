@@ -4,8 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { DateInput, CategoryInput, ValueInput, DescriptionInput } from './FormInputs/';
 import { Title, Paragraph } from '../../Screens/styled/styled';
-import { uuid } from '../../utils/uuid'
-
+import { FormSubmissionDialog } from '../Dialogs/FormSubmissionDialog'
+import { uuid } from '../../utils/uuid';
 const FormContainer = styled.View`
   padding-top: 40px;
 `;
@@ -32,8 +32,7 @@ const disable = (value, category) => {
 } 
 
 export const Form = () => {
-  const [ inputs, setInputs ] = useState ({
-    id: uuid(),
+  const [ inputs, setInputs ] = useState({
     date: '',
     category: {
       isValidated: false,
@@ -44,9 +43,7 @@ export const Form = () => {
       value: '',
     }
   })
-  /* AsyncStorage.getItem(inputs.id, (err, result) => {
-    console.log(result);
-  }); */
+  const [ showDialog, setShowDialog ] = useState(false)
   return (
       <FormContainer>
         <Title>Registro de gastos</Title>
@@ -60,16 +57,18 @@ export const Form = () => {
         <RegisterButton
           disabled={disable(inputs.value.isValidated, inputs.category.isValidated)}
           onPress={() => {  
-            AsyncStorage.setItem(inputs.id,
+            AsyncStorage.setItem(uuid(),
               JSON.stringify({ 
                 date: inputs.date,
                 category: inputs.category.value,
                 value: inputs.value.value
-              }))
+              }));
+            setShowDialog(true);
           }}
         >
           <ButtonText>Registrar gasto</ButtonText>
         </RegisterButton>
+        { showDialog && <FormSubmissionDialog closeDialog={() => setShowDialog(false)}/> }
       </FormContainer>
   )
 }
