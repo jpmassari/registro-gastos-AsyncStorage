@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { DateInput, CategoryInput, ValueInput, DescriptionInput } from './FormInputs/';
-import { Container, Title, Paragraph } from '../../Screens/styled/styled';
+import { Title, Paragraph } from '../../Screens/styled/styled';
+import { uuid } from '../../utils/uuid'
+
 const FormContainer = styled.View`
   padding-top: 40px;
 `;
@@ -29,22 +32,41 @@ const disable = (value, category) => {
 } 
 
 export const Form = () => {
-  const [ categoryInputValidated, setCategoryInputValidated ] = useState(false);
-  const [ valueInputValidated, setValueInputValidated ] = useState(false);
-  console.log(valueInputValidated);
-  console.log(categoryInputValidated);
+  const [ inputs, setInputs ] = useState ({
+    id: uuid(),
+    date: '',
+    category: {
+      isValidated: false,
+      value: ''
+    },
+    value: {
+      isValidated: false,
+      value: '',
+    }
+  })
+  /* AsyncStorage.getItem(inputs.id, (err, result) => {
+    console.log(result);
+  }); */
   return (
       <FormContainer>
         <Title>Registro de gastos</Title>
         <Paragraph>Elencar as despesas por data e categoria é o primeiro passo para a educação financeira.</Paragraph>
         
-        <DateInput />
-        <CategoryInput formValidation={(status) => setCategoryInputValidated(status)} />
-        <ValueInput formValidation={(status) => setValueInputValidated(status)} />
+        <DateInput formValidation={(date) => setInputs({ ...inputs, date:date })} />
+        <CategoryInput formValidation={(status, value) => setInputs({ ...inputs, category: { isValidated: status, value: value } })} />
+        <ValueInput formValidation={(status, value) => setInputs({ ...inputs, value: { isValidated: status, value: value } })} />
         <DescriptionInput/>
 
         <RegisterButton
-          disabled={disable(valueInputValidated, categoryInputValidated)}
+          disabled={disable(inputs.value.isValidated, inputs.category.isValidated)}
+          onPress={() => {  
+            AsyncStorage.setItem(inputs.id,
+              JSON.stringify({ 
+                date: inputs.date,
+                category: inputs.category.value,
+                value: inputs.value.value
+              }))
+          }}
         >
           <ButtonText>Registrar gasto</ButtonText>
         </RegisterButton>

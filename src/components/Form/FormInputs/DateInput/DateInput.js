@@ -55,7 +55,9 @@ const toDate = (calendar) => calendar.calendarDate.toLocaleDateString('en-gb', d
 
 const toTime = (calendar) => calendar.time.toLocaleString("en-gb", dateFormat.time);
 
-export const DateInput = () => {   
+export const DateInput = ({
+  formValidation = () => null
+}) => {   
   const [ calendar, setCalendar ] = useState({
     display: false,
     calendarDate: new Date(),
@@ -77,7 +79,7 @@ export const DateInput = () => {
     });
   };
 
-  useEffect(() => setupLocale(), []);
+  useEffect(() => { setupLocale(); formValidation(toDate(calendar)) }, []);
 
   return (
     <>

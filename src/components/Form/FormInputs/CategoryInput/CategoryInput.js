@@ -46,7 +46,7 @@ export const CategoryInput = ({
         closeScreen={() => setCategoryInput({ ...categoryInput, screenDisplay: false })}
         selectedInput={(value) => {
           setCategoryInput({ ...categoryInput, value:value, screenDisplay: false, selected: true });
-          formValidation(true);
+          formValidation(true, value);
         }} 
       /> 
     }

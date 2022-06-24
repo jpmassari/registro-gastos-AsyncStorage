@@ -84,12 +84,13 @@ export const ValueInput = ({
           onChangeText={(value) => removeNonNumericCharacthers(value)}
           onEndEditing={() => {
             const error = validate(valueInput.value);
-            !error ? formValidation(true) : formValidation(false)
+            const BRL = toFormatBRL(valueInput.value);
+            !error ? formValidation(true, BRL) : formValidation(false, '');
             setValueInput({
               ...valueInput,
               errorMessage: error,
               isFocused: false,
-              value: (error !== ERRORS.INVALID_FORMAT || !error) ? toFormatBRL(valueInput.value) : ''
+              value: (error !== ERRORS.INVALID_FORMAT || !error) ? BRL : ''
             })
           }}
           value={valueInput.value}
