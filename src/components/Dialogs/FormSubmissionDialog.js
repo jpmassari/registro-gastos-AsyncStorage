@@ -38,12 +38,15 @@ const ButtonText = styled.Text`
   text-align: center;
 `;
 
+const toFormatBRL = (value) => {
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+}
 export const FormSubmissionDialog = ({
-  closeDialog = () => null
+  closeDialog = () => null,
+  category = '',
+  date = '',
+  spendings = 0
 }) => {
-
-  const allKeys = (AsyncStorage.getAllKeys())
-  console.log(allKeys);
   return (
     <>
     <ScreenPressable
@@ -51,7 +54,7 @@ export const FormSubmissionDialog = ({
     />
       <Dialog>
         <Title>Muito obrigado!</Title>
-        <Paragraph>Até agora você já gastou tantos reais em "Alimentos" no mês de "Abril/2022"</Paragraph>
+        <Paragraph>Até agora você já gastou {toFormatBRL(spendings)} em "{category}" no mês de “{date}”</Paragraph>
         <DialogButton
           onPress={() => closeDialog()}
         >

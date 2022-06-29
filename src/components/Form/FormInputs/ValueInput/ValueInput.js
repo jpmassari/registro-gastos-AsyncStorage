@@ -85,7 +85,7 @@ export const ValueInput = ({
           onEndEditing={() => {
             const error = validate(valueInput.value);
             const BRL = toFormatBRL(valueInput.value);
-            !error ? formValidation(true, BRL) : formValidation(false, '');
+            !error ? formValidation(true, valueInput.value) : formValidation(false, '');
             setValueInput({
               ...valueInput,
               errorMessage: error,

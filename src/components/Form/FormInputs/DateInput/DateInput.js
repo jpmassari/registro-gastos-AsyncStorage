@@ -51,7 +51,7 @@ const dateFormat = {
     minute:'2-digit'
   }
 }
-const toDate = (calendar) => calendar.calendarDate.toLocaleDateString('en-gb', dateFormat.date);
+const toDate = (calendar) => calendar.toLocaleDateString('en-gb', dateFormat.date);
 
 const toTime = (calendar) => calendar.time.toLocaleString("en-gb", dateFormat.time);
 
@@ -79,7 +79,7 @@ export const DateInput = ({
     });
   };
 
-  useEffect(() => { setupLocale(); formValidation(toDate(calendar)) }, []);
+  useEffect(() => { setupLocale(); formValidation(toDate(calendar.calendarDate)) }, []);
 
   return (
     <>
@@ -94,7 +94,7 @@ export const DateInput = ({
           onPress={() => setCalendar({ ...calendar, display: !calendar.display })}
         >
           <InputButtonText>
-            {toDate(calendar)}, {toTime(calendar)}
+            {toDate(calendar.calendarDate)}, {toTime(calendar)}
           </InputButtonText>
           <Entypo name={calendar.display ? 'chevron-up' : 'chevron-down'} size={24} color="black" />
         </InputButton>
@@ -109,6 +109,7 @@ export const DateInput = ({
               display: false
             });
             selectDate(day);
+            formValidation(toDate(new Date(day.dateString)))
           }}
           markingType={'custom'}
           markedDates={selectedDate}

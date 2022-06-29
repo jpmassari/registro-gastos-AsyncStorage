@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -43,7 +43,8 @@ export const Form = () => {
       value: '',
     }
   })
-  const [ showDialog, setShowDialog ] = useState(false)
+  const [ showDialog, setShowDialog ] = useState(false);
+  let totalCategorySpendings = 0;
   return (
       <FormContainer>
         <Title>Registro de gastos</Title>
@@ -62,13 +63,33 @@ export const Form = () => {
                 date: inputs.date,
                 category: inputs.category.value,
                 value: inputs.value.value
-              }));
+              }), () => {
+                AsyncStorage.getAllKeys((err,res) => {
+                  AsyncStorage.multiGet(res, (err, res)=> {
+                     //filtrando a data
+                    let SpendingsOnMonth = res.filter((value, i, a) => JSON.parse(value[1]).date === inputs.date && a.indexOf(value[0] === i));
+                    //filtra a categoria
+                    let categorySpendings = SpendingsOnMonth.filter((value, i, a) => JSON.parse(value[1]).category === inputs.category && a.indexOf(value[1] !== i));
+                    console.log(categorySpendings);
+                    categorySpendings.forEach((c,i) => {
+                      totalCategorySpendings += parseFloat(JSON.parse(c[1]).value);
+                    })
+                  })
+                });
+              });
             setShowDialog(true);
           }}
         >
           <ButtonText>Registrar gasto</ButtonText>
         </RegisterButton>
-        { showDialog && <FormSubmissionDialog closeDialog={() => setShowDialog(false)}/> }
+        { showDialog && 
+          <FormSubmissionDialog 
+            closeDialog={() => setShowDialog(false)}
+            category={inputs.category.value}
+            date={inputs.date} 
+            spendings={totalCategorySpendings}
+          /> 
+        }
       </FormContainer>
   )
 }
