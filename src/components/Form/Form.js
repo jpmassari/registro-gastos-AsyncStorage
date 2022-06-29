@@ -21,19 +21,30 @@ const ButtonText = styled.Text`
   text-align: center;
 `;
 
+const disable = (value, category) => {
+  if(!value || !category) {
+    return true
+  }
+  return false
+} 
+
 export const Form = () => {
+  const [ categoryInputValidated, setCategoryInputValidated ] = useState(false);
+  const [ valueInputValidated, setValueInputValidated ] = useState(false);
+  console.log(valueInputValidated);
+  console.log(categoryInputValidated);
   return (
       <FormContainer>
         <Title>Registro de gastos</Title>
         <Paragraph>Elencar as despesas por data e categoria é o primeiro passo para a educação financeira.</Paragraph>
         
         <DateInput />
-        <CategoryInput />
-        <ValueInput />
+        <CategoryInput formValidation={(status) => setCategoryInputValidated(status)} />
+        <ValueInput formValidation={(status) => setValueInputValidated(status)} />
         <DescriptionInput/>
 
         <RegisterButton
-          disabled={true}
+          disabled={disable(valueInputValidated, categoryInputValidated)}
         >
           <ButtonText>Registrar gasto</ButtonText>
         </RegisterButton>

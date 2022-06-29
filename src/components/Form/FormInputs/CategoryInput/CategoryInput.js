@@ -29,7 +29,10 @@ const InputButtonText = styled.Text`
   color: ${props => props.value ? 'rgba(0, 0, 0, 1)' : 'rgba(0, 0, 0, 0.5)'}
 `;
 
-export const CategoryInput = () => {
+export const CategoryInput = ({
+  formValidation = () => null
+}) => {
+
   const [ categoryInput, setCategoryInput ] = useState({
     value: 'Escolha uma opção',
     screenDisplay: false,
@@ -41,7 +44,10 @@ export const CategoryInput = () => {
     categoryInput.screenDisplay &&
       <CategoryScreen 
         closeScreen={() => setCategoryInput({ ...categoryInput, screenDisplay: false })}
-        selectedInput={(value) => setCategoryInput({ ...categoryInput, value:value, screenDisplay: false, selected: true })} 
+        selectedInput={(value) => {
+          setCategoryInput({ ...categoryInput, value:value, screenDisplay: false, selected: true });
+          formValidation(true);
+        }} 
       /> 
     }
     <Wrapper>

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/native';
 
 const Wrapper = styled.View`
@@ -39,7 +39,7 @@ const ERRORS = {
 adjustSignPosition = (value) => {
   const firstPart = value.slice(1,3);
   const secondPart = value.slice(0,1);
-  const thirdPart = value.slice(-4);
+  const thirdPart = value.slice(-(value.slice('').length - 4)); //solução temporaria... funciona ok.
   return firstPart + ' ' + secondPart + thirdPart;
 }
 const toFormatBRL = (value) => {
@@ -62,7 +62,9 @@ const validate = (value) => {
   return '';
 }
 
-export const ValueInput = () => {
+export const ValueInput = ({
+  formValidation = () => null
+}) => {
   const [ valueInput, setValueInput ] = useState({
     id: 'valueInput',
     placeholder: 'R$ 0,00',
@@ -72,7 +74,6 @@ export const ValueInput = () => {
   });
   const [ justLoadedForm, setJustLoadedForm ] = useState(true);
   const removeNonNumericCharacthers = (value) => setValueInput({ ...valueInput, value: value.replace(/[^0-9\-\.\,]/g,'') });
-
   return (
     <Wrapper>
       <Label>Valor</Label>
@@ -83,6 +84,7 @@ export const ValueInput = () => {
           onChangeText={(value) => removeNonNumericCharacthers(value)}
           onEndEditing={() => {
             const error = validate(valueInput.value);
+            !error ? formValidation(true) : formValidation(false)
             setValueInput({
               ...valueInput,
               errorMessage: error,
