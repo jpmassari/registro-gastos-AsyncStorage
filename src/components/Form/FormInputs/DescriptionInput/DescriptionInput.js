@@ -86,9 +86,9 @@ export const DescriptionInput = () => {
             const isExceeded = validate(value) //value chega aqui até 141 caracteres, depois recebe o valor de 140 novamente em value: descriptionInput.value
             setDescriptionInput({ 
               ...descriptionInput,
-              value: !isExceeded ? value : descriptionInput.value,
-              wordCount: !isExceeded ? countWords(value) : 140,
-              alertMessage: isExceeded === ALERTS.EXCEEDED_WORDS && isExceeded
+              value: isExceeded ? descriptionInput.value : value,
+              wordCount: isExceeded ? 140 : countWords(value),
+              alertMessage: isExceeded
            })
           }}
           onEndEditing={() => setDescriptionInput({ ...descriptionInput, isFocused: false })}
