@@ -31,8 +31,6 @@ const disable = (value, category) => {
 export const Form = () => {
   const [ categoryInputValidated, setCategoryInputValidated ] = useState(false);
   const [ valueInputValidated, setValueInputValidated ] = useState(false);
-  console.log(valueInputValidated);
-  console.log(categoryInputValidated);
   return (
       <FormContainer>
         <Title>Registro de gastos</Title>
