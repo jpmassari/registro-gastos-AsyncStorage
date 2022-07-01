@@ -49,10 +49,10 @@ export const CategoryScreen = ({
         {
         Categories.map(c => (
           <CardButtom
-            key={c.title}
+            key={c.id}
             onPress={() => { 
               closeScreen();
-              selectedInput(c.inputValue) 
+              selectedInput(c.id, c.inputValue) 
             }}
           >
             <CategoryCard
