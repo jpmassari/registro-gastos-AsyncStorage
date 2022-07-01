@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { DateInput, CategoryInput, ValueInput, DescriptionInput } from './FormInputs/';
 import { Title, Paragraph } from '../../Screens/styled/styled';
 import { FormSubmissionDialog } from '../Dialogs/FormSubmissionDialog'
-import { uuid } from '../../utils/uuid';
+import { SPENDINGS_STORE, monthlySpendings } from '../../store/spendings_store'
 const FormContainer = styled.View`
   padding-top: 40px;
 `;
@@ -33,51 +33,53 @@ const disable = (value, category) => {
 
 export const Form = () => {
   const [ inputs, setInputs ] = useState({
-    date: '',
+    date: new Date(),
+    formatedDate: '',
     category: {
-      isValidated: false,
-      value: ''
+      id: '',
+      value: '',
+      isValidated: false
     },
     value: {
       isValidated: false,
-      value: '',
+      value: 0,
     }
   })
   const [ showDialog, setShowDialog ] = useState(false);
-  let totalCategorySpendings = 0;
+  const [ spendings, setSpendings ] = useState(0);
+  useEffect(() => {
+    const toStore = {
+      category: {
+        id: inputs.category.id,
+        description: inputs.category.value
+      },
+      date: {
+        iso: inputs.date,
+        formated: inputs.formatedDate
+      },
+      value: inputs.value.value
+    }
+    const store = async() => {
+      await SPENDINGS_STORE(toStore)
+      const spends = await monthlySpendings(inputs.formatedDate, inputs.category.id)
+      setSpendings(spends);
+    }
+    store();
+  }, [showDialog]);
   return (
       <FormContainer>
         <Title>Registro de gastos</Title>
         <Paragraph>Elencar as despesas por data e categoria é o primeiro passo para a educação financeira.</Paragraph>
         
-        <DateInput formValidation={(date) => setInputs({ ...inputs, date:date })} />
-        <CategoryInput formValidation={(status, value) => setInputs({ ...inputs, category: { isValidated: status, value: value } })} />
+        <DateInput formValidation={(monthYear, dateISO) => setInputs({ ...inputs, formatedDate: monthYear, date: dateISO })} />
+        <CategoryInput formValidation={(status, id, value) => setInputs({ ...inputs, category: { id: id, value: value, isValidated: status } })} />
         <ValueInput formValidation={(status, value) => setInputs({ ...inputs, value: { isValidated: status, value: value } })} />
         <DescriptionInput/>
 
         <RegisterButton
-          disabled={disable(inputs.value.isValidated, inputs.category.isValidated)}
+          disabled={disable(inputs.value.isValidated, inputs.category.isValidated)} 
           onPress={() => {  
-            AsyncStorage.setItem(uuid(),
-              JSON.stringify({ 
-                date: inputs.date,
-                category: inputs.category.value,
-                value: inputs.value.value
-              }), () => {
-                AsyncStorage.getAllKeys((err,res) => {
-                  AsyncStorage.multiGet(res, (err, res)=> {
-                     //filtrando a data
-                    let SpendingsOnMonth = res.filter((value, i, a) => JSON.parse(value[1]).date === inputs.date && a.indexOf(value[0] === i));
-                    //filtra a categoria
-                    let categorySpendings = SpendingsOnMonth.filter((value, i, a) => JSON.parse(value[1]).category === inputs.category && a.indexOf(value[1] !== i));
-                    console.log(categorySpendings);
-                    categorySpendings.forEach((c,i) => {
-                      totalCategorySpendings += parseFloat(JSON.parse(c[1]).value);
-                    })
-                  })
-                });
-              });
-            setShowDialog(true);
+            setShowDialog(true);          
           }}
         >
           <ButtonText>Registrar gasto</ButtonText>
@@ -85,9 +87,10 @@ export const Form = () => {
         { showDialog && 
           <FormSubmissionDialog 
             closeDialog={() => setShowDialog(false)}
-            category={inputs.category.value}
-            date={inputs.date} 
-            spendings={totalCategorySpendings}
+            description={inputs.category.value}
+            id={inputs.category.id}
+            date={inputs.formatedDate} 
+            spendings={spendings}
           /> 
         }
       </FormContainer>

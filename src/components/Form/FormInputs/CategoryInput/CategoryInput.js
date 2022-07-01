@@ -34,6 +34,7 @@ export const CategoryInput = ({
 }) => {
 
   const [ categoryInput, setCategoryInput ] = useState({
+    id: '',
     value: 'Escolha uma opção',
     screenDisplay: false,
     selected: false
@@ -44,9 +45,9 @@ export const CategoryInput = ({
     categoryInput.screenDisplay &&
       <CategoryScreen 
         closeScreen={() => setCategoryInput({ ...categoryInput, screenDisplay: false })}
-        selectedInput={(value) => {
-          setCategoryInput({ ...categoryInput, value:value, screenDisplay: false, selected: true });
-          formValidation(true, value);
+        selectedInput={(id, value) => {
+          setCategoryInput({ ...categoryInput, id:id, value:value, screenDisplay: false, selected: true });
+          formValidation(true, id, value);
         }} 
       /> 
     }

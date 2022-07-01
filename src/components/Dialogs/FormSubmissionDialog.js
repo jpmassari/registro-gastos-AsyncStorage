@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { Title, Paragraph } from '../styled/styled'
+import { Title, Paragraph } from '../styled/styled';
+import { SPENDINGS_STORE, monthlySpendings } from '../../store/spendings_store';
 
 const ScreenPressable = styled.Pressable`
   background-color: black;
@@ -41,12 +41,24 @@ const ButtonText = styled.Text`
 const toFormatBRL = (value) => {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
 }
+
 export const FormSubmissionDialog = ({
   closeDialog = () => null,
-  category = '',
+  id = '',
+  description = '',
   date = '',
   spendings = 0
 }) => {
+/*   const [ spendings, setSpendings ] = useState(0);
+  useEffect(() => {
+    const fetchSpends = async () => {
+      const spends = await monthlySpendings(date, id)
+      setSpendings(spends);
+      console.log(spends);
+    }
+    fetchSpends();
+    console.log("fetchei")
+  }, [])  */
   return (
     <>
     <ScreenPressable
@@ -54,7 +66,7 @@ export const FormSubmissionDialog = ({
     />
       <Dialog>
         <Title>Muito obrigado!</Title>
-        <Paragraph>Até agora você já gastou {toFormatBRL(spendings)} em "{category}" no mês de “{date}”</Paragraph>
+        <Paragraph>Até agora você já gastou {toFormatBRL(spendings)} em "{description}" no mês de “{date}”</Paragraph>
         <DialogButton
           onPress={() => closeDialog()}
         >
