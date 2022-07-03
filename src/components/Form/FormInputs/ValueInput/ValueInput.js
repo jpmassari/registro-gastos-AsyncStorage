@@ -36,7 +36,7 @@ const ERRORS = {
   INVALID_FORMAT: 'formato invalido'
 };
 
-adjustSignPosition = (value) => {
+const adjustSignPosition = (value) => {
   const firstPart = value.slice(1,3);
   const secondPart = value.slice(0,1);
   const thirdPart = value.slice(-(value.slice('').length - 4)); //solução temporaria... funciona ok.

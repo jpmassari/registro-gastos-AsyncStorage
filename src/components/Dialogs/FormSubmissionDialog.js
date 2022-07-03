@@ -19,7 +19,8 @@ const Dialog = styled.View`
   padding: 20px 15px 30px;
   position: absolute;
   bottom: -20px;
-  left: auto;
+  left: 0;
+  right: 0;
   background-color: #fff;
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
@@ -34,7 +35,7 @@ const DialogButton = styled.TouchableOpacity`
 const ButtonText = styled.Text`
   font-family: 'Inter_700Bold';
   font-size: 14px;
-  color: #000;
+  color: #4A4242;
   text-align: center;
 `;
 
@@ -44,21 +45,10 @@ const toFormatBRL = (value) => {
 
 export const FormSubmissionDialog = ({
   closeDialog = () => null,
-  id = '',
   description = '',
   date = '',
-  spendings = 0
+  spendings = 0,
 }) => {
-/*   const [ spendings, setSpendings ] = useState(0);
-  useEffect(() => {
-    const fetchSpends = async () => {
-      const spends = await monthlySpendings(date, id)
-      setSpendings(spends);
-      console.log(spends);
-    }
-    fetchSpends();
-    console.log("fetchei")
-  }, [])  */
   return (
     <>
     <ScreenPressable
@@ -66,7 +56,7 @@ export const FormSubmissionDialog = ({
     />
       <Dialog>
         <Title>Muito obrigado!</Title>
-        <Paragraph>Até agora você já gastou {toFormatBRL(spendings)} em "{description}" no mês de “{date}”</Paragraph>
+        <Paragraph hasMargin >Até agora você já gastou {toFormatBRL(spendings)} em "{description}" no mês de “{date}”</Paragraph>
         <DialogButton
           onPress={() => closeDialog()}
         >

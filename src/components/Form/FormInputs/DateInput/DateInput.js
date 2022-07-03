@@ -57,9 +57,9 @@ const monthYearFormat = {
     year: 'numeric'
   }
 }
-const toDate = (calendar) => calendar.toLocaleDateString('en-gb', dateFormat.date);
+const toDate = (calendar) => calendar.toLocaleDateString('pt-br', dateFormat.date);
 
-const toTime = (calendar) => calendar.time.toLocaleString("en-gb", dateFormat.time);
+const toTime = (calendar) => calendar.time.toLocaleString("pt-br", dateFormat.time);
 
 export const DateInput = ({
   formValidation = () => null
@@ -85,7 +85,10 @@ export const DateInput = ({
     });
   };
 
-  useEffect(() => { setupLocale(); formValidation(new Date(calendar.calendarDate).toLocaleDateString('en-gb', monthYearFormat.date), new Date(calendar.calendarDate)) }, []);
+  useEffect(() => { 
+    setupLocale(); 
+    formValidation(new Date(calendar.calendarDate).toLocaleDateString('pt-br', monthYearFormat.date), new Date(calendar.calendarDate));
+  }, []);
 
   return (
     <>
