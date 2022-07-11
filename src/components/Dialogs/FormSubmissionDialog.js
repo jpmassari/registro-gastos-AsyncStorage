@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
 
 import { Title, Paragraph } from '../styled/styled';
-import { SPENDINGS_STORE, monthlySpendings } from '../../store/spendings_store';
 
 const ScreenPressable = styled.Pressable`
   background-color: black;

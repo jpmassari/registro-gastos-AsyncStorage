@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 
 import { DateInput, CategoryInput, ValueInput, DescriptionInput } from './FormInputs/';
 import { Title, Paragraph } from '../../Screens/styled/styled';
 import { FormSubmissionDialog } from '../Dialogs/FormSubmissionDialog'
 import { storeSpendings, getMonthlySpendings } from '../../store/spendings_store'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const FormContainer = styled.View`
   padding-top: 40px;
 `;
-
 const RegisterButton = styled.TouchableOpacity`
   border-radius: 5px;
   padding: 10px 20px;
@@ -23,13 +24,18 @@ const ButtonText = styled.Text`
   text-align: center;
 `;
 
-const disable = (value, category) => {
-  if(!value || !category) {
-    return true
-  }
-  return false
-} 
-
+const isDisabled = (inputs) => !inputs.value.isValidated || !inputs.category.isValidated;
+const normalize = (inputs) => ({
+  category: {
+    id: inputs.category.id,
+    description: inputs.category.value
+  },
+  date: {
+    iso: inputs.date,
+    formated: inputs.formatedDate
+  },
+  value: inputs.value.value
+})
 export const Form = () => {
   const [ inputs, setInputs ] = useState({
     date: new Date(),
@@ -46,6 +52,7 @@ export const Form = () => {
   })
   const [ showDialog, setShowDialog ] = useState(false);
   const [ spendings, setSpendings ] = useState(0);
+  //  AsyncStorage.clear();
   return (
     <FormContainer>
       <Title>Registro de gastos</Title>
@@ -57,22 +64,12 @@ export const Form = () => {
       <DescriptionInput/>
 
       <RegisterButton
-        disabled={disable(inputs.value.isValidated, inputs.category.isValidated)} 
-        onPress={() => { 
+        disabled={isDisabled(inputs)} 
+        onPress={() => {
           const fetchSpends = async () => {
-            const toStore = {
-              category: {
-                id: inputs.category.id,
-                description: inputs.category.value
-              },
-              date: {
-                iso: inputs.date,
-                formated: inputs.formatedDate
-              },
-              value: inputs.value.value
-            }
-            await storeSpendings(toStore)
-            const spends = await getMonthlySpendings(inputs.formatedDate, inputs.category.id)
+            const normalizedSpends = normalize(inputs);
+            await storeSpendings(normalizedSpends);
+            const spends = await getMonthlySpendings(inputs.formatedDate, inputs.category.id);
             setSpendings(spends);
             setShowDialog(true);
           }         

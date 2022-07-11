@@ -48,7 +48,6 @@ const validate = (text) => {
   }
   return '';
 }
-
 export const DescriptionInput = () => {
   const [ descriptionInput, setDescriptionInput ] = useState({
     id:'descriptionInput',

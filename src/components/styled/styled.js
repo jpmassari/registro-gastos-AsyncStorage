@@ -10,7 +10,6 @@ export const Title = styled.Text`
   color: #000;
   font-family: 'Inter_700Bold';
   font-size: 24px;
-  margin
 `;
 export const Paragraph = styled.Text`
   font-family: 'Inter_400Regular';
